@@ -8,7 +8,7 @@ function Protected() {
     const fetchData = async () => {
       const token = localStorage.getItem('token');
       const response = await fetch('/protected', {
-        headers: { 'Authorization': `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
       if (response.ok) {
         const data = await response.text();

@@ -9,12 +9,14 @@ function registerUser(req, res) {
   if (!username || !password) {
     return res.status(400).send('Invalid input data');
   }
-  if (users.find(user => user.username === username)) {
+  if (users.find((user) => user.username === username)) {
     return res.status(409).send('Username already taken');
   }
   bcrypt.hash(password, 10, (err, hashedPassword) => {
     if (err) return res.status(500).send('Error hashing password');
-    const token = jwt.sign({ username }, process.env.TOKEN_SECRET, { expiresIn: '1d' });
+    const token = jwt.sign({ username }, process.env.TOKEN_SECRET, {
+      expiresIn: '1d',
+    });
     users.push({ username, hashedPassword });
     res.status(201).send({ token });
   });
@@ -22,11 +24,13 @@ function registerUser(req, res) {
 
 function loginUser(req, res) {
   const { username, password } = req.body;
-  const user = users.find(user => user.username === username);
+  const user = users.find((user) => user.username === username);
   if (!user) return res.status(401).send('Unauthorized');
   bcrypt.compare(password, user.hashedPassword, (err, result) => {
     if (err || !result) return res.status(401).send('Unauthorized');
-    const token = jwt.sign({ username }, process.env.TOKEN_SECRET, { expiresIn: '1d' });
+    const token = jwt.sign({ username }, process.env.TOKEN_SECRET, {
+      expiresIn: '1d',
+    });
     res.status(200).send({ token });
   });
 }
@@ -45,5 +49,5 @@ function authenticateUser(req, res, next) {
 module.exports = {
   registerUser,
   loginUser,
-  authenticateUser
+  authenticateUser,
 };
